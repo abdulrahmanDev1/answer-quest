@@ -22,12 +22,17 @@ export function HoverCard({
   return (
     <Hovercard>
       <HoverCardTrigger asChild>
-        <Button
-          variant="ghost"
-          className="p-2 text-xl w-full border-dashed border hover:bg-indigo-300/50"
+        <div
+          className="p-2 text-xl w-full min-h-full border-dashed border rounded-md shadow hover:bg-indigo-300/20 hover:text-slate-700 hover:shadow-none cursor-help duration-300"
+          style={{
+            whiteSpace: "pre-wrap",
+            wordWrap: "break-word",
+            height: "auto",
+            overflow: "auto",
+          }}
         >
           {question}
-        </Button>
+        </div>
       </HoverCardTrigger>
       <HoverCardContent className="w-80">
         <div className="flex justify-between space-x-4">

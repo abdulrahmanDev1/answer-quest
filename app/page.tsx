@@ -1,15 +1,17 @@
 "use client";
 import axios from "axios";
 import Markdown from "react-markdown";
-
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
 import { SubmitForm } from "@/components/SubmitForm";
+import { Progress } from "@/components/ui/progress";
+import HowTo from "@/components/how-to";
 
 type Data = {
   text: string;
   isAcceptable: boolean;
+  precentage: number;
   error?: string;
 };
 
@@ -39,9 +41,11 @@ export default function Page() {
 
   const [data, setData] = useState<Data>({
     text: "",
+    precentage: 0,
     isAcceptable: false,
   });
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [answer, setAnswer] = useState("");
   const fetchData = async () => {
     setLoading(true);
@@ -51,6 +55,7 @@ export default function Page() {
         answer: answer,
       });
       setData(response.data);
+      setProgress(response.data.precentage);
     } catch (e) {
       console.log(e);
     } finally {
@@ -62,7 +67,9 @@ export default function Page() {
     <div className="mx-auto max-w-2xl py-4 md:py-16 lg:py-28 z-50  ">
       <div className="text-center flex justify-center items-center flex-col">
         <div className="relative w-max rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-          Answer the question and we&#39;ll answer your&#39;s
+          Answer the question{" "}
+          <span className="text-xs text-gray-400">*if you can</span> and
+          we&#39;ll answer your&#39;s
         </div>
         <h1 className="text-4xl font-bold tracking-tight text-indigo-600 p-4">
           {questionLoading ? <Loader width={40} /> : question}
@@ -75,7 +82,7 @@ export default function Page() {
                                     `}
           placeholder={`${data?.error ? "Answer is required!" : "The answer is..."}`}
         />
-
+        <Progress value={progress} className="w-[60%] mt-4" />
         <div className="mt-10 flex items-center justify-center gap-x-6">
           {data.isAcceptable ? (
             <SubmitForm answer={answer} isAcceptable={data.isAcceptable} />
@@ -98,6 +105,7 @@ export default function Page() {
           {data.isAcceptable ? "👍" : null}
         </span>
       </div>
+      <HowTo />
     </div>
   );
 }

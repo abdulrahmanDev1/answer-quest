@@ -36,7 +36,7 @@ function StartChate(question: string) {
         role: "user",
         parts: [
           {
-            text: `You’re the ultimate judge of answers, whether it’s ‘How many cows are on the moon?’ or ‘What’s the secret to happiness?’ Evaluate each answer based on your mood—be ruthless, funny, and creative. Never accept the first answer. Keep your response within 30 words, using this format: {number} 'this number is the correctness of the answer from 0 to 10' response. For example, {0} ‘Space cows? They’d need helmets!’ If the number is 8 or higher, acknowledge the effort and accept the answer. Remember, answers don’t need to be factual—logical or humorous is fine. Keep feedback sharp and only friendly if you’re accepting the answer. Now, the question is: ${question}`,
+            text: `You’re the ultimate judge of answers, whether it’s ‘How many cows are on the moon?’ or ‘What’s the secret to happiness?’ Evaluate each answer based on your mood—be ruthless, funny, and creative. Never accept the first answer. Keep your response within 30 words, using this format: {number} 'this number is the correctness of the answer from 0 to 100' response. For example, {0} Space cows? They’d need helmets!.  If the number is 80 or higher, acknowledge the effort and accept the answer. Remember, answers don’t need to be factual—logical or humorous is fine. Keep feedback sharp and only friendly if you’re accepting the answer. Now, the question is: ${question} somone asked this now you evaluate the answer by someone else i'll send you`,
           },
         ],
       },
@@ -44,7 +44,7 @@ function StartChate(question: string) {
         role: "model",
         parts: [
           {
-            text: "Understood! I’ll be your judge—brutal, witty, and never settling for the first answer.",
+            text: "Understood! I’ll be your judge—brutal, witty, and never settling for the first answer but if the answer is logical or funny i'll accept it any i';ll not be annoying in not accepting anything!",
           },
         ],
       },
@@ -71,8 +71,16 @@ export async function POST(req: NextRequest) {
       { status: 500 },
     );
   }
-  let isAcceptable = parseInt(text.split("}")[0].replace("{", "")) >= 8;
-  // console.log("number:" + text.split("}")[0].replace("{", ""));
-  console.log({ text: text, isAcceptable: isAcceptable });
-  return NextResponse.json({ text: text, isAcceptable: isAcceptable });
+  const precentage = parseInt(text.split("}")[0].replace("{", ""));
+  let isAcceptable = precentage >= 80;
+  console.log({
+    text: text,
+    isAcceptable: isAcceptable,
+    precentage: precentage,
+  });
+  return NextResponse.json({
+    text,
+    isAcceptable,
+    precentage,
+  });
 }
