@@ -109,7 +109,6 @@ export async function POST(req: NextRequest) {
     `The question is :${question} and the answer is : ${answer}`,
   );
   const response = result.response;
-  console.log({ response: response });
   const text = response.text();
   if (!text) {
     return NextResponse.json(

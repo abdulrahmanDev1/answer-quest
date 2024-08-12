@@ -91,6 +91,12 @@ export async function getUser(email: string, name: string) {
   return user;
 }
 
+export async function getUserById(userId: string) {
+  return await db.query.users.findFirst({
+    where: (model, { eq }) => eq(model.id, userId),
+  });
+}
+
 export async function createAnswer(
   questionId: string,
   userId: string,

@@ -5,9 +5,11 @@ import {
   createQuestion,
   getLatestQuestion,
   getUser,
+  getUserById,
 } from "@/server/queries";
 import { revalidatePath } from "next/cache";
 import { env } from "@/env";
+import { sendAnswerEmail } from "@/lib/send-answer-email";
 
 function decodeUrlParams(url: string): Record<string, string> {
   const urlObj = new URL(url);
@@ -29,6 +31,7 @@ export async function GET(req: NextRequest) {
   }
 
   const latestQuestion = await getLatestQuestion();
+  const askedQuestionUser = await getUserById(latestQuestion!.askedBy);
 
   const createdAnswer = await createAnswer(latestQuestion!.id, user.id, answer);
 
@@ -43,7 +46,17 @@ export async function GET(req: NextRequest) {
     answeredBy: name,
     email: user.email,
   };
-  // sendResponseEmail(creatorResponse);
+  sendAnswerEmail({
+    email: askedQuestionUser!.email,
+    AnswerEmailProps: {
+      name: askedQuestionUser!.name,
+      askedQuestion: latestQuestion!.content,
+      answer: createdAnswer!.content,
+      answeredBy: user!.name,
+      answerCreatedAt: createdAnswer!.createdAt.toLocaleString(),
+      checkUrl: `${env.NEXT_PUBLIC_HOSTNAME}/questions`,
+    },
+  });
   const log = {
     userId: user.id,
     answeredQuestionId: latestQuestion!.id,
