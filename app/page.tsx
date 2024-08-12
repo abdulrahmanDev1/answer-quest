@@ -2,7 +2,7 @@
 import axios from "axios";
 import Markdown from "react-markdown";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
 import { SubmitForm } from "@/components/SubmitForm";
@@ -13,7 +13,30 @@ type Data = {
   error?: string;
 };
 
-export default function Example() {
+function Loader({ width }: { width?: number }) {
+  return (
+    <LoaderCircle
+      width={width}
+      height={width}
+      className="mx-auto animate-spin duration-[10000] "
+    />
+  );
+}
+
+export default function Page() {
+  const [question, setQuestion] = useState<string>("");
+  const [questionLoading, setQuestionLoading] = useState(true);
+  useEffect(() => {
+    const fetchQuestion = async () => {
+      setQuestionLoading(true);
+      const getQuestion = await axios.get("/api/question");
+      const question = getQuestion.data.content;
+      setQuestion(question);
+      setQuestionLoading(false);
+    };
+    fetchQuestion();
+  }, []);
+
   const [data, setData] = useState<Data>({
     text: "",
     isAcceptable: false,
@@ -39,7 +62,7 @@ export default function Example() {
           Answer the question and we&#39;ll answer your&#39;s
         </div>
         <h1 className="text-4xl font-bold tracking-tight text-indigo-600 p-4">
-          How many cows Are on the moon ?
+          {questionLoading ? <Loader width={40} /> : question}
         </h1>
         <textarea
           required
@@ -59,11 +82,7 @@ export default function Example() {
               disabled={loading}
               className=" bg-indigo-600  hover:bg-indigo-500 focus-visible:outline-indigo-600 w-24 h-12"
             >
-              {loading ? (
-                <LoaderCircle className="mx-auto animate-spin duration-[10000] " />
-              ) : (
-                "Submit"
-              )}
+              {loading ? <Loader /> : "Submit"}
             </Button>
           )}
         </div>

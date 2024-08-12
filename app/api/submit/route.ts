@@ -1,11 +1,12 @@
-// localhost:3000/api/submit?answer=25&question=whatisthesolvto5*5&email=test@email.com
 import { type NextRequest, NextResponse } from "next/server";
 import {
   createAnswer,
-  createUser,
-  getQuestions,
-  getUserByEmail,
+  createQuestion,
+  getLatestQuestion,
+  getUser,
 } from "@/server/queries";
+import { revalidatePath } from "next/cache";
+import { env } from "@/env";
 
 function decodeUrlParams(url: string): Record<string, string> {
   const urlObj = new URL(url);
@@ -20,12 +21,25 @@ function decodeUrlParams(url: string): Record<string, string> {
 
 export async function GET(req: NextRequest) {
   const url = req.url;
-  const questions = getQuestions();
-  const user = await createUser("test@t.co", "D7OM");
-  // const user = await getUserByEmail("test@t.co");
-  console.log("createdUser", user);
-  const { question, answer, email } = decodeUrlParams(url);
-  const createdAnswer = await createAnswer(, 1, "25");
+  const { question, answer, email, name } = decodeUrlParams(url);
+  const user = await getUser(email, name);
+  if (!user) {
+    return NextResponse.json({
+      error: "User not found",
+    });
+  }
 
-  return NextResponse.json({ question, answer, email, questions, user });
+  const latestQuestion = await getLatestQuestion();
+  console.log("Latest Question", latestQuestion);
+  console.log("User Result", user);
+  const createdAnswer = await createAnswer(latestQuestion!.id, user.id, answer);
+
+  console.log("Created Answer", createdAnswer);
+  const createdQuestion = await createQuestion(
+    createdAnswer!.answeredBy,
+    question,
+  );
+  console.log("Created Question", createdQuestion);
+  revalidatePath("/");
+  return NextResponse.redirect(env.NEXT_PUBLIC_HOSTNAME + "/ty");
 }

@@ -1,4 +1,4 @@
-import { CircleChevronRight, MailIcon, SendIcon } from "lucide-react";
+import { CircleChevronRight } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -11,13 +11,26 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { cn } from "@/lib/utils";
-import { FC, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { env } from "@/env";
+import { sendEmail } from "@/lib/send-email";
+import { Button } from "./ui/button";
 
 export type FormData = {
   email: string;
   question: string;
+  name: string;
+};
+
+export type EmailProps = {
+  name: string;
+  question: string;
+  answer: string;
+  answerCreatedAt: string;
+  submitUrl: string;
+  email: string;
 };
 
 const LabelInputContainer = ({
@@ -48,32 +61,16 @@ function encodeUrlParams(
   question: string,
   answer: string,
   email: string,
+  name: string,
 ): string {
-  const urlObj = new URL(baseURL);
+  let urlObj = new URL(baseURL);
 
   urlObj.searchParams.set("question", encodeURIComponent(question));
   urlObj.searchParams.set("answer", encodeURIComponent(answer));
   urlObj.searchParams.set("email", encodeURIComponent(email));
+  urlObj.searchParams.set("name", encodeURIComponent(name));
 
   return urlObj.toString();
-}
-
-function sendEmail(data: string) {}
-
-const baseURL = "localhost:3000/api/submit";
-
-function onSubmit(
-  data: FormData,
-  answer: string,
-  setOpen: (open: boolean) => void,
-  reset: () => void,
-) {
-  const emailUrl = encodeUrlParams(baseURL, data.question, answer, data.email);
-  // sendEmail(emailUrl);
-  console.log(emailUrl);
-  toast.success("Check your email!");
-  setOpen(false);
-  reset();
 }
 
 type SubmitFormProps = {
@@ -81,6 +78,42 @@ type SubmitFormProps = {
 };
 
 export const SubmitForm = ({ answer }: SubmitFormProps) => {
+  const hostname = env.NEXT_PUBLIC_HOSTNAME;
+  console.log(hostname);
+  const baseURL = hostname + "/api/submit";
+  function onSubmit(
+    data: FormData,
+    answer: string,
+    setOpen: (open: boolean) => void,
+    reset: () => void,
+  ) {
+    const emailUrl = encodeUrlParams(
+      baseURL,
+      data.question,
+      answer,
+      data.email,
+      data.name,
+    );
+
+    setOpen(false);
+
+    try {
+      sendEmail({
+        name: data.name,
+        question: data.question,
+        answer: answer,
+        submitUrl: emailUrl,
+        email: data.email,
+        answerCreatedAt: new Date().toLocaleString(),
+      });
+      toast.success("Check your email! 📬 (check spam too)");
+    } catch (e) {
+      console.log(e);
+      toast.error("Failed to send email");
+    }
+
+    reset();
+  }
   const [open, setOpen] = useState(false);
   const { register, handleSubmit, reset } = useForm<FormData>();
 
@@ -93,9 +126,9 @@ export const SubmitForm = ({ answer }: SubmitFormProps) => {
       </DialogTrigger>
       <DialogContent className="z-50">
         <DialogHeader>
-          <DialogTitle>Send me an email</DialogTitle>
+          <DialogTitle>Confirm your answer</DialogTitle>
           <DialogDescription>
-            Send me an email and I will get back to you as soon as possible.
+            Confirm your answer and ask a question yourself!{" "}
           </DialogDescription>
         </DialogHeader>
         <form
@@ -105,6 +138,16 @@ export const SubmitForm = ({ answer }: SubmitFormProps) => {
             onSubmit(data, answer, setOpen, reset),
           )}
         >
+          <LabelInputContainer className="mb-4">
+            <Label htmlFor="email">Name</Label>
+            <Input
+              id="name"
+              placeholder="Tyler Durden"
+              type="text"
+              required
+              {...register("name")}
+            />
+          </LabelInputContainer>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="email">Email Address</Label>
             <Input
@@ -125,13 +168,13 @@ export const SubmitForm = ({ answer }: SubmitFormProps) => {
             />
           </LabelInputContainer>
 
-          <button
-            className=" flex items-center justify-center gap-2 bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600  dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+          <Button
             type="submit"
+            className="group relative w-full flex justify-center  border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
           >
             Submit
             <BottomGradient />
-          </button>
+          </Button>
         </form>
       </DialogContent>
     </Dialog>
