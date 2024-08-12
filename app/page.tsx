@@ -46,7 +46,10 @@ export default function Page() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.post("/api/answer", { answer: answer });
+      const response = await axios.post("/api/answer", {
+        question: question,
+        answer: answer,
+      });
       setData(response.data);
     } catch (e) {
       console.log(e);
@@ -74,15 +77,15 @@ export default function Page() {
         />
 
         <div className="mt-10 flex items-center justify-center gap-x-6">
-          {!data.isAcceptable ? (
-            <SubmitForm answer={answer} />
+          {data.isAcceptable ? (
+            <SubmitForm answer={answer} isAcceptable={data.isAcceptable} />
           ) : (
             <Button
               onClick={() => fetchData()}
               disabled={loading}
               className=" bg-indigo-600  hover:bg-indigo-500 focus-visible:outline-indigo-600 w-24 h-12"
             >
-              {loading ? <Loader /> : "Submit"}
+              {loading ? <Loader width={30} /> : "Submit"}
             </Button>
           )}
         </div>

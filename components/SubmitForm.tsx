@@ -75,9 +75,10 @@ function encodeUrlParams(
 
 type SubmitFormProps = {
   answer: string;
+  isAcceptable?: boolean;
 };
 
-export const SubmitForm = ({ answer }: SubmitFormProps) => {
+export const SubmitForm = ({ answer, isAcceptable }: SubmitFormProps) => {
   const hostname = env.NEXT_PUBLIC_HOSTNAME;
   console.log(hostname);
   const baseURL = hostname + "/api/submit";
@@ -96,20 +97,23 @@ export const SubmitForm = ({ answer }: SubmitFormProps) => {
     );
 
     setOpen(false);
-
-    try {
-      sendEmail({
-        name: data.name,
-        question: data.question,
-        answer: answer,
-        submitUrl: emailUrl,
-        email: data.email,
-        answerCreatedAt: new Date().toLocaleString(),
-      });
-      toast.success("Check your email! 📬 (check spam too)");
-    } catch (e) {
-      console.log(e);
-      toast.error("Failed to send email");
+    if (isAcceptable) {
+      try {
+        sendEmail({
+          name: data.name,
+          question: data.question,
+          answer: answer,
+          submitUrl: emailUrl,
+          email: data.email,
+          answerCreatedAt: new Date().toLocaleString(),
+        });
+        toast.success("Check your email! 📬 (check spam too)");
+      } catch (e) {
+        console.log(e);
+        toast.error("Failed to send email");
+      }
+    } else {
+      toast.error("Your answer is not acceptable");
     }
 
     reset();
