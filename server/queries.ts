@@ -1,6 +1,6 @@
 import "server-only";
 import { db } from "@/server/db";
-import { answers, questions, users } from "./db/schema";
+import { answers, logs, questions, users } from "./db/schema";
 
 export async function getQuestions() {
   return await db.query.questions.findMany();
@@ -141,4 +141,30 @@ export async function getQuestionAnswers(questionId: string) {
   return await db.query.answers.findMany({
     where: (model, { eq }) => eq(model.questionId, questionId),
   });
+}
+
+export async function createLog(log: {
+  userId: string;
+  answeredQuestionId: string;
+  createdAnswerId: string;
+  createdQuestionId: string;
+  creatorResponse: string;
+}) {
+  const {
+    userId,
+    answeredQuestionId,
+    createdAnswerId,
+    createdQuestionId,
+    creatorResponse,
+  } = log;
+
+  const result = await db.insert(logs).values({
+    userId: userId,
+    answeredQuestionId: answeredQuestionId,
+    createdAnswerId: createdAnswerId,
+    createdQuestionId: createdQuestionId,
+    creatorResponse: creatorResponse,
+  });
+
+  return result[0];
 }

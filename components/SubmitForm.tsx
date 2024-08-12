@@ -80,7 +80,6 @@ type SubmitFormProps = {
 
 export const SubmitForm = ({ answer, isAcceptable }: SubmitFormProps) => {
   const hostname = env.NEXT_PUBLIC_HOSTNAME;
-  console.log(hostname);
   const baseURL = hostname + "/api/submit";
   function onSubmit(
     data: FormData,
@@ -119,7 +118,12 @@ export const SubmitForm = ({ answer, isAcceptable }: SubmitFormProps) => {
     reset();
   }
   const [open, setOpen] = useState(false);
-  const { register, handleSubmit, reset } = useForm<FormData>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>();
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -143,33 +147,70 @@ export const SubmitForm = ({ answer, isAcceptable }: SubmitFormProps) => {
           )}
         >
           <LabelInputContainer className="mb-4">
-            <Label htmlFor="email">Name</Label>
+            <Label htmlFor="name">Name</Label>
             <Input
               id="name"
               placeholder="Tyler Durden"
               type="text"
-              required
-              {...register("name")}
+              {...register("name", {
+                required: "Name is required",
+                maxLength: {
+                  value: 30,
+                  message: "Name cannot be more than 30 characters",
+                },
+                minLength: {
+                  value: 2,
+                  message: "Name must be at least 2 characters",
+                },
+              })}
             />
+            {errors.name && (
+              <div className="text-red-500">{errors.name.message}</div>
+            )}
           </LabelInputContainer>
+
           <LabelInputContainer className="mb-4">
             <Label htmlFor="email">Email Address</Label>
             <Input
               id="email"
               placeholder="tylerdurden@fc.com"
               type="email"
-              required
-              {...register("email")}
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                  message: "Invalid email address",
+                },
+              })}
             />
+            {errors.email && (
+              <div className="text-red-500">{errors.email.message}</div>
+            )}
           </LabelInputContainer>
+
           <LabelInputContainer className="mb-8">
             <Label htmlFor="message">Your Question</Label>
             <Textarea
               id="question"
               placeholder="What is..."
-              required
-              {...register("question")}
+              {...register("question", {
+                required: "Question is required",
+                maxLength: {
+                  value: 200,
+                  message: "Question cannot be more than 200 characters",
+                },
+                minLength: {
+                  value: 10,
+                  message: "Question must be at least 10 characters",
+                },
+                validate: (value) =>
+                  value.endsWith("?") ||
+                  "Question must end with a question mark",
+              })}
             />
+            {errors.question && (
+              <div className="text-red-500">{errors.question.message}</div>
+            )}
           </LabelInputContainer>
 
           <Button

@@ -90,7 +90,8 @@ export default function Page() {
             <Button
               onClick={() => fetchData()}
               disabled={loading}
-              className=" bg-indigo-600  hover:bg-indigo-500 focus-visible:outline-indigo-600 w-24 h-12"
+              type="submit"
+              className=" text-lg bg-indigo-600  hover:bg-indigo-500 focus-visible:outline-indigo-600 w-24 h-10"
             >
               {loading ? <Loader width={30} /> : "Submit"}
             </Button>

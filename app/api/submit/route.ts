@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import {
   createAnswer,
+  createLog,
   createQuestion,
   getLatestQuestion,
   getUser,
@@ -24,22 +25,37 @@ export async function GET(req: NextRequest) {
   const { question, answer, email, name } = decodeUrlParams(url);
   const user = await getUser(email, name);
   if (!user) {
-    return NextResponse.json({
-      error: "User not found",
-    });
+    return NextResponse.json({ error: "User not found" });
   }
 
   const latestQuestion = await getLatestQuestion();
-  console.log("Latest Question", latestQuestion);
-  console.log("User Result", user);
+
   const createdAnswer = await createAnswer(latestQuestion!.id, user.id, answer);
 
-  console.log("Created Answer", createdAnswer);
   const createdQuestion = await createQuestion(
     createdAnswer!.answeredBy,
     question,
   );
-  console.log("Created Question", createdQuestion);
+
+  const creatorResponse = {
+    question: latestQuestion?.content,
+    answer: createdAnswer?.content,
+    answeredBy: name,
+    email: user.email,
+  };
+  // sendResponseEmail(creatorResponse);
+  const log = {
+    userId: user.id,
+    answeredQuestionId: latestQuestion!.id,
+    createdAnswerId: createdAnswer!.id,
+    createdQuestionId: createdQuestion!.id,
+    creatorResponse: JSON.stringify(creatorResponse),
+  };
+
+  const createdLog = await createLog(log);
+
+  console.log("createdLog:", createdLog);
+
   revalidatePath("/");
   return NextResponse.redirect(env.NEXT_PUBLIC_HOSTNAME + "/ty");
 }
