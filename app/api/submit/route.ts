@@ -38,6 +38,7 @@ export async function GET(req: NextRequest) {
       error: "User cannot answer their own question",
     });
   }
+
   const userAnswer = await getUserAnswer(user.id, latestQuestion!.id);
 
   if (userAnswer) {

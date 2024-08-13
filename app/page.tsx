@@ -7,8 +7,7 @@ import { LoaderCircle } from "lucide-react";
 import { SubmitForm } from "@/components/SubmitForm";
 import { Progress } from "@/components/ui/progress";
 import HowTo from "@/components/how-to";
-
-export const dynamic = "force-dynamic";
+import { toast } from "sonner";
 
 type Data = {
   text: string;
@@ -33,8 +32,17 @@ export default function Page() {
   useEffect(() => {
     const fetchQuestion = async () => {
       setQuestionLoading(true);
-      const getQuestion = await axios.get("/api/question");
-      const question = getQuestion.data.content;
+      const getQuestion = await fetch("/api/question", {
+        cache: "no-store",
+      }).then((res) => res.json());
+
+      if (!getQuestion) {
+        setQuestion("No question found!");
+        setQuestionLoading(false);
+        return;
+      }
+      const question = getQuestion.content;
+
       setQuestion(question);
       setQuestionLoading(false);
     };
@@ -46,10 +54,15 @@ export default function Page() {
     percentage: 0,
     isAcceptable: false,
   });
+
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [answer, setAnswer] = useState("");
   const fetchData = async () => {
+    if (answer === "") {
+      toast.error("Answer is required!");
+      return;
+    }
     setLoading(true);
     try {
       const response = await axios.post("/api/answer", {

@@ -105,7 +105,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Answer is required" });
   }
   const result = await chat.sendMessage(
-    `The question is :${question} and the answer is : ${answer}`,
+    `The question is : ${question} and the answer is : ${answer}`,
   );
   const response = result.response;
   const text = response.text();

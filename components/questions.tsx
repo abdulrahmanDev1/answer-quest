@@ -4,8 +4,6 @@ import React, { useEffect, useState } from "react";
 import { HoverCard } from "@/components/hover-card";
 import { LoaderCircle } from "lucide-react";
 
-export const dynamic = "force-dynamic";
-
 interface Question {
   id: number;
   question: string;
@@ -30,8 +28,9 @@ function Questions() {
   useEffect(() => {
     const fetchQuestion = async () => {
       setQuestionLoading(true);
-      const geQuestions = await axios.get("/api/questions");
-      setQuestions(geQuestions.data);
+      const response = await fetch("/api/questions", { cache: "no-store" });
+      const data = await response.json();
+      setQuestions(data);
       setQuestionLoading(false);
     };
     fetchQuestion();
