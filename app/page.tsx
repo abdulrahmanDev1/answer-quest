@@ -66,10 +66,18 @@ export default function Page() {
   return (
     <div className="mx-auto max-w-2xl py-4 md:py-16 lg:py-28 z-50  ">
       <div className="text-center flex justify-center items-center flex-col">
-        <div className="relative w-max rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
+        <div
+          style={{
+            whiteSpace: "pre-wrap",
+            wordWrap: "break-word",
+            height: "auto",
+            overflow: "auto",
+          }}
+          className="relative min-h-full rounded-full px-3 mx-2 md:px-1 py-1 md:py-0.5 text-sm md:text-xs leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
+        >
           Answer the question{" "}
-          <span className="text-xs text-gray-400">*if you can</span> and
-          we&#39;ll answer your&#39;s
+          <span className="text-xs md:text-2xs text-gray-400">*if you can</span>{" "}
+          and we&#39;ll answer your&#39;s
         </div>
         <h1 className="text-4xl font-bold tracking-tight text-indigo-600 p-4">
           {questionLoading ? <Loader width={40} /> : question}
