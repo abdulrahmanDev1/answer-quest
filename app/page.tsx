@@ -40,6 +40,9 @@ export default function Page() {
       setQuestionLoading(true);
       const getQuestion = await fetch("/api/question", {
         cache: "no-store",
+        next: {
+          revalidate: 60, // revalidate every 60 seconds
+        },
       }).then((res) => res.json());
 
       if (!getQuestion) {
