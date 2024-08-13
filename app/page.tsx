@@ -15,6 +15,12 @@ type Data = {
   percentage: number;
   error?: string;
 };
+type Question = {
+  id: string;
+  askedBy: string;
+  content: string;
+  createdAt: string;
+};
 
 function Loader({ width }: { width?: number }) {
   return (
@@ -27,7 +33,7 @@ function Loader({ width }: { width?: number }) {
 }
 
 export default function Page() {
-  const [question, setQuestion] = useState<string>("");
+  const [question, setQuestion] = useState<Question | null>(null);
   const [questionLoading, setQuestionLoading] = useState(true);
   useEffect(() => {
     const fetchQuestion = async () => {
@@ -37,11 +43,17 @@ export default function Page() {
       }).then((res) => res.json());
 
       if (!getQuestion) {
-        setQuestion("No question found!");
+        setQuestion({
+          id: "",
+          askedBy: "",
+          content: "No question found!",
+          createdAt: "",
+        });
         setQuestionLoading(false);
         return;
       }
-      const question = getQuestion.content;
+      const question = getQuestion;
+      console.log(question);
 
       setQuestion(question);
       setQuestionLoading(false);
@@ -95,7 +107,7 @@ export default function Page() {
           and we&#39;ll answer your&#39;s
         </div>
         <h1 className="text-4xl font-bold tracking-tight text-indigo-600 p-4">
-          {questionLoading ? <Loader width={40} /> : question}
+          {questionLoading ? <Loader width={40} /> : question?.content}
         </h1>
         <textarea
           required
@@ -108,7 +120,11 @@ export default function Page() {
         <Progress value={progress} className="w-[60%] mt-4" />
         <div className="mt-10 flex items-center justify-center gap-x-6">
           {data.isAcceptable ? (
-            <SubmitForm answer={answer} isAcceptable={data.isAcceptable} />
+            <SubmitForm
+              answer={answer}
+              isAcceptable={data.isAcceptable}
+              questionId={question!.id}
+            />
           ) : (
             <Button
               onClick={() => fetchData()}

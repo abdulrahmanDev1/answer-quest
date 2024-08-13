@@ -60,6 +60,7 @@ function encodeUrlParams(
   baseURL: string,
   question: string,
   answer: string,
+  answeredQuestion: string,
   email: string,
   name: string,
 ): string {
@@ -69,16 +70,22 @@ function encodeUrlParams(
   urlObj.searchParams.set("answer", encodeURIComponent(answer));
   urlObj.searchParams.set("email", encodeURIComponent(email));
   urlObj.searchParams.set("name", encodeURIComponent(name));
+  urlObj.searchParams.set("answeredQuestion", answeredQuestion);
 
   return urlObj.toString();
 }
 
 type SubmitFormProps = {
   answer: string;
+  questionId: string;
   isAcceptable?: boolean;
 };
 
-export const SubmitForm = ({ answer, isAcceptable }: SubmitFormProps) => {
+export const SubmitForm = ({
+  answer,
+  questionId,
+  isAcceptable,
+}: SubmitFormProps) => {
   const hostname = env.NEXT_PUBLIC_HOSTNAME;
   const baseURL = hostname + "/api/submit";
   function onSubmit(
@@ -91,6 +98,7 @@ export const SubmitForm = ({ answer, isAcceptable }: SubmitFormProps) => {
       baseURL,
       data.question,
       answer,
+      questionId,
       data.email,
       data.name,
     );

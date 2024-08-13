@@ -90,11 +90,11 @@ export const Email = ({
                   {name}
                 </Text>
                 <Text style={{ ...paragraph, marginTop: -5 }}>
-                  <b>Question: </b>
+                  <b>Your question: </b>
                   {question}
                 </Text>
                 <Text style={{ ...paragraph, marginTop: -5 }}>
-                  <b>Answer: </b>
+                  <b>Your answer: </b>
                   {answer}
                 </Text>
 

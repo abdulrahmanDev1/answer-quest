@@ -17,14 +17,14 @@ export default function HowTo() {
     <Dialog>
       <DialogTrigger
         asChild
-        className="mx-auto flex items-center justify-center mt-10 md:mt-28 lg:mt-36"
+        className="mx-auto flex items-center justify-center mt-4 md:mt-10 lg:mt-28 "
       >
         <Button variant="link">How to ?..</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>How to ?..</DialogTitle>
-          <DialogDescription>How the game works</DialogDescription>
+          <DialogDescription>How it works</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-2 items-center">
           <div className="flex flex-col gap-4 items-center">
@@ -54,6 +54,15 @@ export default function HowTo() {
                 confirmation button. Click this button to confirm your question
                 submission. Once confirmed, your question will be added to the
                 page as the next challenge!
+              </AlertDescription>
+            </Alert>
+
+            <Alert>
+              <AlertTitle>What next?</AlertTitle>
+              <AlertDescription>
+                If someone answered your question you will receive an email with
+                the answer. You can then try answer their question and the cycle
+                continues.
               </AlertDescription>
             </Alert>
 

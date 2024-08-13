@@ -154,6 +154,14 @@ export async function getQuestionAnswers(questionId: string) {
   });
 }
 
+export async function checkIsAnswered(questionId: string) {
+  const answers = await db.query.answers.findMany({
+    where: (model, { eq }) => eq(model.questionId, questionId),
+  });
+
+  return answers.length > 0;
+}
+
 export async function createLog(log: {
   userId: string;
   answeredQuestionId: string;
