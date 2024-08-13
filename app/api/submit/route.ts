@@ -5,6 +5,7 @@ import {
   createQuestion,
   getLatestQuestion,
   getUser,
+  getUserAnswer,
   getUserById,
 } from "@/server/queries";
 import { revalidatePath } from "next/cache";
@@ -31,14 +32,15 @@ export async function GET(req: NextRequest) {
   }
 
   const latestQuestion = await getLatestQuestion();
+  const userAnswer = await getUserAnswer(user.id, latestQuestion!.id);
+
+  if (userAnswer) {
+    return NextResponse.json({ error: "Question already answered" });
+  }
+
   const askedQuestionUser = await getUserById(latestQuestion!.askedBy);
-
   const createdAnswer = await createAnswer(latestQuestion!.id, user.id, answer);
-
-  const createdQuestion = await createQuestion(
-    createdAnswer!.answeredBy,
-    question,
-  );
+  const createdQuestion = await createQuestion(user.id, question);
 
   const creatorResponse = {
     question: latestQuestion?.content,
@@ -46,6 +48,7 @@ export async function GET(req: NextRequest) {
     answeredBy: name,
     email: user.email,
   };
+
   sendAnswerEmail({
     email: askedQuestionUser!.email,
     AnswerEmailProps: {
@@ -57,6 +60,7 @@ export async function GET(req: NextRequest) {
       checkUrl: `${env.NEXT_PUBLIC_HOSTNAME}/questions`,
     },
   });
+
   const log = {
     userId: user.id,
     answeredQuestionId: latestQuestion!.id,

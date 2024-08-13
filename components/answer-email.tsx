@@ -92,8 +92,8 @@ export const AnswerEmail = ({
                   {answer}
                 </Text>
                 <Text style={{ ...paragraph, marginTop: -5 }}>
-                  <b>Answered By: {answeredBy}</b>
-                  {name}
+                  <b>Answered By: </b>
+                  {answeredBy}{" "}
                 </Text>
                 <Text style={paragraph}>
                   <b>Answered at: </b>

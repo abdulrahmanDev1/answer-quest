@@ -7,6 +7,12 @@ export async function getQuestions() {
   return await db.query.questions.findMany();
 }
 
+export async function getQuestionById(id: string) {
+  return await db.query.questions.findFirst({
+    where: (model, { eq }) => eq(model.id, id),
+  });
+}
+
 export async function getQuestionsWithAnswers() {
   try {
     const questionsWithAnswers = await db.execute(sql`
@@ -122,6 +128,18 @@ export async function getAnswer(answerId: string) {
   return await db.query.answers.findFirst({
     where: (model, { eq }) => eq(model.id, answerId),
   });
+}
+
+export async function getUserAnswer(userId: string, questionId: string) {
+  const answer = await db.query.answers.findFirst({
+    where: (model, { eq, and }) =>
+      and(eq(model.answeredBy, userId), eq(model.questionId, questionId)),
+  });
+
+  if (!answer) {
+    return null;
+  }
+  return answer;
 }
 
 export async function getQuestion(questionId: string) {
