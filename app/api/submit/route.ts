@@ -32,6 +32,12 @@ export async function GET(req: NextRequest) {
   }
 
   const latestQuestion = await getLatestQuestion();
+
+  if (latestQuestion?.askedBy === user.id) {
+    return NextResponse.json({
+      error: "User cannot answer their own question",
+    });
+  }
   const userAnswer = await getUserAnswer(user.id, latestQuestion!.id);
 
   if (userAnswer) {
