@@ -11,7 +11,7 @@ import HowTo from "@/components/how-to";
 type Data = {
   text: string;
   isAcceptable: boolean;
-  precentage: number;
+  percentage: number;
   error?: string;
 };
 
@@ -20,7 +20,7 @@ function Loader({ width }: { width?: number }) {
     <LoaderCircle
       width={width}
       height={width}
-      className="mx-auto animate-spin duration-[10000] "
+      className="mx-auto animate-spin duration-[10s] "
     />
   );
 }
@@ -41,7 +41,7 @@ export default function Page() {
 
   const [data, setData] = useState<Data>({
     text: "",
-    precentage: 0,
+    percentage: 0,
     isAcceptable: false,
   });
   const [loading, setLoading] = useState(false);
@@ -55,7 +55,7 @@ export default function Page() {
         answer: answer,
       });
       setData(response.data);
-      setProgress(response.data.precentage);
+      setProgress(response.data.percentage);
     } catch (e) {
       console.log(e);
     } finally {

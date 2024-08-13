@@ -1,5 +1,6 @@
 import "server-only";
 import { db } from "@/server/db";
+import { sql } from "drizzle-orm";
 import { answers, logs, questions, users } from "./db/schema";
 
 export async function getQuestions() {
@@ -7,48 +8,34 @@ export async function getQuestions() {
 }
 
 export async function getQuestionsWithAnswers() {
-  // Fetch all questions
-  const questions = await db.query.questions.findMany();
+  try {
+    const questionsWithAnswers = await db.execute(sql`
+      SELECT
+        q.content AS question_content,
+        a.content AS answer_content,
+        a."created_at" AS answer_created_at,
+        u.name AS user_name
+      FROM
+        hackathon_questions q
+      JOIN
+        hackathon_answers a ON q.id = a."question_id"
+      JOIN
+        hackathon_users u ON a."answered_by" = u.id
+      ORDER BY
+        a."created_at" DESC
+    `);
 
-  // Extract all question IDs
-  const questionIds = questions.map((question) => question.id);
-
-  // Fetch all answers for the given question IDs
-  const answers = await db.query.answers.findMany({
-    where: (model, { eq, or }) =>
-      or(...questionIds.map((id) => eq(model.questionId, id))),
-  });
-
-  // Extract all user IDs from the answers
-  const userIds = [...new Set(answers.map((answer) => answer.answeredBy))];
-
-  // Fetch all users with the extracted user IDs
-  const users = await db.query.users.findMany({
-    where: (model, { eq, or }) => or(...userIds.map((id) => eq(model.id, id))),
-  });
-
-  // Create a map for quick user lookup
-  const userMap = new Map(users.map((user) => [user.id, user]));
-
-  // Map the questions to include the answer and user data
-  const questionsWithAnswers = questions.map((question) => {
-    const answer = answers.find((answer) => answer.questionId === question.id);
-    const user = answer ? userMap.get(answer.answeredBy) : null;
-
-    if (!answer || !user) return null;
-
-    return {
-      question: question.content,
-      answer: answer.content,
-      answeredBy: user.name,
-      answeredAt: answer.createdAt,
-    };
-  });
-
-  // Filter out any null values
-  const filteredQuestions = questionsWithAnswers.filter(Boolean);
-
-  return filteredQuestions;
+    const results = questionsWithAnswers.map((row) => ({
+      question: row.question_content,
+      answer: row.answer_content,
+      answeredBy: row.user_name,
+      answeredAt: row.answer_created_at,
+    }));
+    return results;
+  } catch (error) {
+    console.error("Error fetching questions with answers:", error);
+    throw error;
+  }
 }
 
 export async function getLatestQuestion() {

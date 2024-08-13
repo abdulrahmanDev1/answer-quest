@@ -104,7 +104,6 @@ export async function POST(req: NextRequest) {
   if (!answer) {
     return NextResponse.json({ error: "Answer is required" });
   }
-  // const result = await model.generateContent(prompt);
   const result = await chat.sendMessage(
     `The question is :${question} and the answer is : ${answer}`,
   );
@@ -119,16 +118,18 @@ export async function POST(req: NextRequest) {
       { status: 500 },
     );
   }
-  const precentage = parseInt(text.split("}")[0].replace("{", ""));
-  let isAcceptable = precentage >= 80;
+  const regex = /\{(\d+)\}/g;
+  const match = regex.exec(text);
+  const percentage = match ? parseInt(match[1]) : 0;
+  let isAcceptable = percentage >= 80;
   console.log({
     text: text,
     isAcceptable: isAcceptable,
-    precentage: precentage,
+    percentage: percentage,
   });
   return NextResponse.json({
     text,
     isAcceptable,
-    precentage,
+    percentage,
   });
 }
