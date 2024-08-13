@@ -16,11 +16,11 @@ export async function getQuestionsWithAnswers() {
         a."created_at" AS answer_created_at,
         u.name AS user_name
       FROM
-        hackathon_questions q
+        "answer-quest_questions" q
       JOIN
-        hackathon_answers a ON q.id = a."question_id"
+        "answer-quest_answers" a ON q.id = a."question_id"
       JOIN
-        hackathon_users u ON a."answered_by" = u.id
+        "answer-quest_users" u ON a."answered_by" = u.id
       ORDER BY
         a."created_at" DESC
     `);

@@ -10,7 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 // Creating a table with a specific naming convention for a multi-project schema
-export const createTable = pgTableCreator((name) => `hackathon_${name}`);
+export const createTable = pgTableCreator((name) => `answer-quest_${name}`);
 
 // Users table
 export const users = createTable(

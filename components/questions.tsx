@@ -17,7 +17,7 @@ function Loader({ width }: { width?: number }) {
     <LoaderCircle
       width={width}
       height={width}
-      className="mx-auto animate-spin duration-[10000] "
+      className="mx-auto animate-spin duration-[10s] "
     />
   );
 }

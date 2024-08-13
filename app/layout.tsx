@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@vercel/analytics/react";
 import Nav from "@/components/nav";
+import { env } from "@/env";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Answer me ?..",
+  title: "Answer quest",
   description: "Answer the question if you can!",
 };
 
@@ -37,6 +39,7 @@ export default function RootLayout({
           </div>
           {children}
           <Toaster />
+          {env.NODE_ENV === "production" && <Analytics />}
         </div>
       </body>
     </html>

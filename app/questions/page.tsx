@@ -1,7 +1,7 @@
 import Questions from "@/components/questions";
 
 export const metadata = {
-  title: "Q & A",
+  title: "Answer quest | Q & A",
   description: "Questions and answers page",
 };
 
