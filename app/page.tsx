@@ -8,6 +8,8 @@ import { SubmitForm } from "@/components/SubmitForm";
 import { Progress } from "@/components/ui/progress";
 import HowTo from "@/components/how-to";
 
+export const dynamic = "force-dynamic";
+
 type Data = {
   text: string;
   isAcceptable: boolean;
