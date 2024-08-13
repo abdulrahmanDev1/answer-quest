@@ -5,6 +5,7 @@ export const metadata = {
   description: "Questions and answers page",
 };
 
+export const dynamic = "force-dynamic";
 export default function Page() {
   return (
     <main className="flex gap-4 flex-col items-center justify-between px-4 md:px-12 lg:px-24">

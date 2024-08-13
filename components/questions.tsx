@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { HoverCard } from "@/components/hover-card";
 import { LoaderCircle } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 interface Question {
   id: number;
   question: string;
