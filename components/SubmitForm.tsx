@@ -7,6 +7,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  RegExpMatcher,
+  englishDataset,
+  englishRecommendedTransformers,
+} from "obscenity";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
@@ -47,14 +52,10 @@ const LabelInputContainer = ({
   );
 };
 
-const BottomGradient = () => {
-  return (
-    <>
-      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
-      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
-    </>
-  );
-};
+const matcher = new RegExpMatcher({
+  ...englishDataset.build(),
+  ...englishRecommendedTransformers,
+});
 
 function encodeUrlParams(
   baseURL: string,
@@ -94,6 +95,10 @@ export const SubmitForm = ({
     setOpen: (open: boolean) => void,
     reset: () => void,
   ) {
+    if (matcher.hasMatch(data.question)) {
+      toast.error("Your question contains inappropriate words!");
+      return;
+    }
     const emailUrl = encodeUrlParams(
       baseURL,
       data.question,
@@ -116,7 +121,6 @@ export const SubmitForm = ({
         });
         toast.success("Check your email! 📬 (check spam too)");
       } catch (e) {
-        // console.log(e);
         toast.error("Failed to send email");
       }
     } else {
@@ -226,7 +230,6 @@ export const SubmitForm = ({
             className="group relative w-full flex justify-center  border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500"
           >
             Submit
-            <BottomGradient />
           </Button>
         </form>
       </DialogContent>

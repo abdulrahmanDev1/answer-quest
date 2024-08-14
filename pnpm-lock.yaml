@@ -71,6 +71,9 @@ importers:
       next-themes:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      obscenity:
+        specifier: ^0.4.0
+        version: 0.4.0
       postgres:
         specifier: ^3.4.4
         version: 3.4.4
@@ -2399,6 +2402,10 @@ packages:
   object.values@1.2.0:
     resolution: {integrity: sha512-yBYjY9QX2hnRmZHAjG/f13MzmBzxzYgQhFrke06TTyKY5zSTEqkOeukBzIdVA3j3ulu8Qa3MbVFShV7T2RmGtQ==}
     engines: {node: '>= 0.4'}
+
+  obscenity@0.4.0:
+    resolution: {integrity: sha512-fB+Qr/bSVjDD7Gkf3umgWJuUJQpArV7PejJeNZVQlRjhlXms9MD12jIGFMI8USx3CK21ph84GWjUSZ/kqiyaPw==}
+    engines: {node: '>=14.0.0'}
 
   obuf@1.1.2:
     resolution: {integrity: sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==}
@@ -5449,6 +5456,8 @@ snapshots:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-object-atoms: 1.0.0
+
+  obscenity@0.4.0: {}
 
   obuf@1.1.2:
     optional: true

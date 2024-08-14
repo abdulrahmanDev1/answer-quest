@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,9 @@ export default function Error() {
                 <h1 className="my-2 text-gray-800 font-bold text-4xl">
                   Error:{" "}
                 </h1>
-                <p className="my-2 text-gray-800 text-2xl">{error}</p>
+                <Suspense fallback={<div>Loading...</div>}>
+                  <p className="my-2 text-gray-800 text-2xl">{error}</p>
+                </Suspense>
                 <Button size="lg" onClick={() => router.push("/")}>
                   Go home
                 </Button>

@@ -74,6 +74,7 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [answer, setAnswer] = useState("");
+  const [acceptedAnswer, setAcceptedAnswer] = useState("");
   const fetchData = async () => {
     if (answer === "") {
       toast.error("Answer is required!");
@@ -87,8 +88,11 @@ export default function Page() {
       });
       setData(response.data);
       setProgress(response.data.percentage);
+      if (response.data.isAcceptable) {
+        setAcceptedAnswer(answer);
+      }
     } catch (e) {
-      // console.log(e);
+      toast.error("Failed to submit answer");
     } finally {
       setLoading(false);
     }
@@ -125,7 +129,7 @@ export default function Page() {
         <div className="mt-10 flex items-center justify-center gap-x-6">
           {data.isAcceptable ? (
             <SubmitForm
-              answer={answer}
+              answer={acceptedAnswer}
               isAcceptable={data.isAcceptable}
               questionId={question!.id}
             />
