@@ -145,12 +145,11 @@ export default function Page() {
           )}
         </div>
         <span
-          className={`p-4 mx-2 items-center justify-center mt-8 rounded-md h-auto ${data.text ? "border border-dashed border-slate-400" : ""}`}
+          className={`p-4 mx-2 items-center justify-center mt-8 rounded-md h-auto ${data.text ? "border border-dashed border-slate-400" : ""} ${data.isAcceptable ? "border-green-500 bg-green-200" : ""}`}
         >
           <Markdown className=" flex gap-1 text-lg font-semibold text-gray-900 ">
             {data.error ? null : data.text.split("}")[1]}
           </Markdown>
-          {data.isAcceptable ? "👍" : null}
         </span>
       </div>
       <HowTo />

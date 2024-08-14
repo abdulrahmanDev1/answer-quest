@@ -66,7 +66,7 @@ const chat = model.startChat({
       role: "user",
       parts: [
         {
-          text: "exactly now i'll give you a question and answer and do the same and keep your response at most 30 words\n",
+          text: "exactly now i'll give you a question and answer and do the same and keep your response at most 30 words and never accept one word answers\n",
         },
       ],
     },
@@ -100,7 +100,6 @@ const chat = model.startChat({
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { question, answer } = body;
-  console.log({ "Question:": question.content, "Answer:": answer });
   if (!answer) {
     return NextResponse.json({ error: "Answer is required" });
   }
@@ -121,7 +120,16 @@ export async function POST(req: NextRequest) {
   const regex = /\{(\d+)\}/g;
   const match = regex.exec(text);
   const percentage = match ? parseInt(match[1]) : 0;
-  let isAcceptable = percentage >= 90;
+  // let isAcceptable = percentage >= 90;
+  let isAcceptable = true;
+
+  console.log({
+    Question: question.content,
+    Answer: answer,
+    Response: text,
+    Percentage: percentage,
+    IsAcceptable: isAcceptable,
+  });
 
   return NextResponse.json({
     text,

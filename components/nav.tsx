@@ -16,7 +16,7 @@ function Nav() {
         <Link
           key={item.name}
           href={item.href}
-          className={`z-20 text-2xl font-semibold leading-6 hover:text-gray-900 ${currentPath == item.href ? "text-gray-900" : "text-gray-600"} focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 duration-300`}
+          className={`z-20 text-2xl font-semibold leading-6 hover:text-gray-800 ${currentPath == item.href ? "text-gray-900 border rounded-full bg-gray-500/10 p-2" : "text-gray-600"} focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 duration-300`}
         >
           {item.name}
         </Link>
