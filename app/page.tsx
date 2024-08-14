@@ -32,6 +32,8 @@ function Loader({ width }: { width?: number }) {
   );
 }
 
+export const fetchCache = "force-no-store";
+
 export default function Page() {
   const [question, setQuestion] = useState<Question | null>(null);
   const [questionLoading, setQuestionLoading] = useState(true);
@@ -41,7 +43,7 @@ export default function Page() {
       const getQuestion = await fetch("/api/question", {
         cache: "no-store",
         next: {
-          revalidate: 60, // revalidate every 60 seconds
+          revalidate: 0,
         },
       }).then((res) => res.json());
 
