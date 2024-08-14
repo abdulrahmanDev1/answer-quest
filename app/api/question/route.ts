@@ -1,4 +1,4 @@
-import { checkIsAnswered, getLatestQuestion } from "@/server/queries";
+import { getLatestQuestion } from "@/server/queries";
 import { NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {

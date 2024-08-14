@@ -7,11 +7,11 @@ export function sendEmail(data: EmailProps) {
     method: "POST",
     body: JSON.stringify(data),
   })
-    .then((res) => res.json())
-    .then((response) => {
-      // console.log(response.message);
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      return res.json();
     })
-    .catch((err) => {
-      console.error(err);
-    });
+    .catch(() => {});
 }
