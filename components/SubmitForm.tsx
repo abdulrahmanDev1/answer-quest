@@ -116,7 +116,7 @@ export const SubmitForm = ({
         });
         toast.success("Check your email! 📬 (check spam too)");
       } catch (e) {
-        console.log(e);
+        // console.log(e);
         toast.error("Failed to send email");
       }
     } else {

@@ -100,7 +100,7 @@ const chat = model.startChat({
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { question, answer } = body;
-  console.log({ question: question, answer: answer });
+  // console.log({ question: question, answer: answer });
   if (!answer) {
     return NextResponse.json({ error: "Answer is required" });
   }
@@ -122,11 +122,11 @@ export async function POST(req: NextRequest) {
   const match = regex.exec(text);
   const percentage = match ? parseInt(match[1]) : 0;
   let isAcceptable = percentage >= 80;
-  console.log({
-    text: text,
-    isAcceptable: isAcceptable,
-    percentage: percentage,
-  });
+  // console.log({
+  //   text: text,
+  //   isAcceptable: isAcceptable,
+  //   percentage: percentage,
+  // });
   return NextResponse.json({
     text,
     isAcceptable,

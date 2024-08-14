@@ -9,7 +9,7 @@ export function sendEmail(data: EmailProps) {
   })
     .then((res) => res.json())
     .then((response) => {
-      console.log(response.message);
+      // console.log(response.message);
     })
     .catch((err) => {
       console.error(err);

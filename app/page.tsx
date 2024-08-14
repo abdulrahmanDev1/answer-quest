@@ -56,7 +56,6 @@ export default function Page() {
         return;
       }
       const question = getQuestion;
-      console.log(question);
 
       setQuestion(question);
       setQuestionLoading(false);
@@ -87,7 +86,7 @@ export default function Page() {
       setData(response.data);
       setProgress(response.data.percentage);
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     } finally {
       setLoading(false);
     }
@@ -103,7 +102,7 @@ export default function Page() {
             height: "auto",
             overflow: "auto",
           }}
-          className="relative min-h-full rounded-full px-3 mx-2 md:px-1 py-1 md:py-0.5 text-sm md:text-xs leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
+          className="relative min-h-full rounded-full px-3 mx-2 md:px-1 py-1 md:py-0.5 text-xs md:text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20"
         >
           Answer the question{" "}
           <span className="text-xs md:text-2xs text-gray-400">*if you can</span>{" "}

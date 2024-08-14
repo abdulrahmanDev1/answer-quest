@@ -185,5 +185,5 @@ export async function createLog(log: {
     creatorResponse: creatorResponse,
   });
 
-  return result[0];
+  return result;
 }
