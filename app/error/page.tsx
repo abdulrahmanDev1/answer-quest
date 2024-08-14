@@ -3,15 +3,19 @@ import React, { Suspense } from "react";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
-export default function Error() {
+function ErrorMessage({ router }: { router: AppRouterInstance }) {
   const searchParams = useSearchParams();
-  const router = useRouter();
-
   const error = searchParams.get("error");
   if (!error) {
     router.push("/");
   }
+  return <p className="my-2 text-gray-800 text-2xl">{error}</p>;
+}
+
+export default function Error() {
+  const router = useRouter();
   return (
     <div>
       <div className="lg:px-24 lg:py-24 md:py-20 md:px-44 px-4 py-24 items-center flex justify-center flex-col-reverse lg:flex-row md:gap-28 gap-16">
@@ -23,7 +27,7 @@ export default function Error() {
                   Error:{" "}
                 </h1>
                 <Suspense fallback={<div>Loading...</div>}>
-                  <p className="my-2 text-gray-800 text-2xl">{error}</p>
+                  <ErrorMessage router={router} />
                 </Suspense>
                 <Button size="lg" onClick={() => router.push("/")}>
                   Go home
