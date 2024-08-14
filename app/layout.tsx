@@ -11,6 +11,22 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Answer quest",
   description: "Answer the question if you can!",
+  keywords: [
+    "answer",
+    "question",
+    "quiz",
+    "game",
+    "fun",
+    "challenge",
+    "answer quest",
+    "answerquest",
+    "answer quest game",
+    "answer quest quiz",
+  ],
+  authors: {
+    name: "D7OM",
+    url: "https://d7om.dev",
+  },
 };
 
 export default function RootLayout({
