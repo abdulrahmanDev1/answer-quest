@@ -100,11 +100,12 @@ const chat = model.startChat({
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { question, answer } = body;
+  console.log({ "Question:": question.content, "Answer:": answer });
   if (!answer) {
     return NextResponse.json({ error: "Answer is required" });
   }
   const result = await chat.sendMessage(
-    `The question is : ${question} and the answer is : ${answer}`,
+    `The question is : ${question.content} and the answer is : ${answer}`,
   );
   const response = result.response;
   const text = response.text();
