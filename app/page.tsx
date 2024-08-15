@@ -1,6 +1,5 @@
 "use client";
 import axios from "axios";
-import Markdown from "react-markdown";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
@@ -8,6 +7,7 @@ import { SubmitForm } from "@/components/SubmitForm";
 import { Progress } from "@/components/ui/progress";
 import HowTo from "@/components/how-to";
 import { toast } from "sonner";
+import AnswerFeedback from "@/components/AnswerFeedback";
 
 type Data = {
   text: string;
@@ -144,13 +144,11 @@ export default function Page() {
             </Button>
           )}
         </div>
-        <span
-          className={`p-4 mx-2 items-center justify-center mt-8 rounded-md h-auto ${data.text ? "border border-dashed border-slate-400" : ""} ${data.isAcceptable ? "border-green-500 bg-green-200" : ""}`}
-        >
-          <Markdown className=" flex gap-1 text-lg font-semibold text-gray-900 ">
-            {data.error ? null : data.text.split("}")[1]}
-          </Markdown>
-        </span>
+        <AnswerFeedback
+          loading={loading}
+          text={data.text}
+          isAcceptable={data.isAcceptable}
+        />
       </div>
       <HowTo />
     </div>

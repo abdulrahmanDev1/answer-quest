@@ -1,5 +1,5 @@
 "use client";
-import axios from "axios";
+import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { HoverCard } from "@/components/hover-card";
 import { LoaderCircle } from "lucide-react";
@@ -46,15 +46,20 @@ function Questions() {
     <Loader width={50} />
   ) : (
     <div className=" py-4 lg:py-10  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-      {questions.map((question) => (
-        <div key={question.id}>
+      {questions.map((question, index) => (
+        <motion.div
+          key={question.id}
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.1, duration: 0.2, ease: "easeOut" }}
+        >
           <HoverCard
             question={question.question}
             answer={question.answer}
             answeredBy={question.answeredBy}
             answeredAt={new Date(question.answeredAt).toLocaleString()}
           />
-        </div>
+        </motion.div>
       ))}
     </div>
   );
