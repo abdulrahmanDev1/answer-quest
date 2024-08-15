@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Answer quest
 
-## Getting Started
+#### A simple question and answer game with a twist
 
-First, run the development server:
+#### Try to answer the questions and if you do it'll be your turn to ask a question.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+#### its simple yet not so easy ;)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+##### Enjoy!
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+[answer quest](https://answer-quest.d7om.dev/)
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+![Answer-quest.png](./README-img/answer-quest.png)
 
-## Learn More
+## How to Play
 
-To learn more about Next.js, take a look at the following resources:
+<details>
+<summary>1. Answer the Question</summary>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Read the question displayed on the screen. Try to answer it to the best of your ability. It might be challenging, but give it your best shot!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+</details>
 
-## Deploy on Vercel
+<details>
+<summary>2. Fill Out the Form</summary>
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+If you answer the question correctly, a "Next" button will appear. Click this button to proceed to a form where you'll need to provide your name, email, and the question you want to ask.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+</details>
+
+<details>
+<summary>3. Confirm Your Email</summary>
+
+After submitting the form, you'll receive an email with a confirmation button. Click this button to confirm your question submission. Once confirmed, your question will be added to the page as the next challenge!
+
+</details>
+
+<details>
+<summary>What next?</summary>
+
+If someone answered your question you will receive an email with the answer. You can then try answer their question and the cycle continues.
+
+</details>
+
+##### Developed by: [d7om.dev](https://d7om.dev)
