@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1723402015060,
-      "tag": "0000_cold_carlie_cooper",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1723402041225,
-      "tag": "0001_bitter_sleepwalker",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1723499711777,
-      "tag": "0002_woozy_wolf_cub",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1723560835032,
-      "tag": "0003_early_diamondback",
+      "when": 1723991526271,
+      "tag": "0000_spotty_sentinel",
       "breakpoints": true
     }
   ]
