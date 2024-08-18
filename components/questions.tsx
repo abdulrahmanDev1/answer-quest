@@ -1,8 +1,15 @@
 "use client";
 import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
 import { HoverCard } from "@/components/hover-card";
 import { LoaderCircle } from "lucide-react";
+
+const queryClient = new QueryClient();
 
 interface Question {
   id: number;
@@ -17,36 +24,43 @@ function Loader({ width }: { width?: number }) {
     <LoaderCircle
       width={width}
       height={width}
-      className="mx-auto animate-spin duration-[10s] "
+      className="mx-auto animate-spin duration-[10s]"
     />
   );
 }
 
-export const fetchCache = "force-no-store";
+async function fetchQuestions(): Promise<Question[]> {
+  const response = await fetch("/api/questions");
 
-function Questions() {
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [questionLoading, setQuestionLoading] = useState(true);
-  useEffect(() => {
-    const fetchQuestion = async () => {
-      setQuestionLoading(true);
-      const response = await fetch("/api/questions", {
-        cache: "no-store",
-        next: {
-          revalidate: 0,
-        },
-      });
-      const data = await response.json();
-      setQuestions(data);
-      setQuestionLoading(false);
-    };
-    fetchQuestion();
-  }, []);
-  return questionLoading ? (
-    <Loader width={50} />
-  ) : (
-    <div className=" py-4 lg:py-10  grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-      {questions.map((question, index) => (
+  if (!response.ok) {
+    throw new Error("Failed to fetch questions");
+  }
+
+  return response.json();
+}
+
+function QuestionsContent() {
+  const {
+    data: questions,
+    isLoading,
+    error,
+  } = useQuery<Question[], Error>({
+    queryKey: ["questions"],
+    queryFn: fetchQuestions,
+    staleTime: 1000 * 60 * 5, // cache data for 5 minutes
+  });
+
+  if (isLoading) {
+    return <Loader width={50} />;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  return (
+    <div className="py-4 lg:py-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
+      {questions?.map((question, index) => (
         <motion.div
           key={question.id}
           initial={{ opacity: 0, y: 100 }}
@@ -65,4 +79,10 @@ function Questions() {
   );
 }
 
-export default Questions;
+export default function Questions() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <QuestionsContent />
+    </QueryClientProvider>
+  );
+}
